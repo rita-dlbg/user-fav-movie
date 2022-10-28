@@ -1,10 +1,15 @@
 import React from 'react';
 import { useState } from 'react';
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { TextField, Box, IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { Link } from "react-router-dom";
+
+
 
 const SignIn = () => {
+
+  const navigate = useNavigate();
      
   const [signin, setSignin] = useState({
     email:{
@@ -83,7 +88,7 @@ const SignIn = () => {
                 fullWidth
               />
 
-              <button className="button-form btn-hover" type="submit">Sign In </button>
+              <button className="button-form btn-hover" onClick={navigate('/user-profile')} type="button">Sign In </button>
               <div className="tc link-to"><Link to="/">Click Here to Register</Link></div>
         </Box>
         </div>
