@@ -1,15 +1,11 @@
 import React from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import MovieFavorite from '../../component/favourite';
 
+const Movies = () => {
 
-const Movies = ({ addToFavorite, deleteToFavorite, props }) => {
-
-  
-        const [state, setState] = useState({
-         movies : [
-          {
+        const [state, setState] = useState([{
+          
             id: 1,
             name: "Darbar",
             image: "/images/movie1.jpeg",
@@ -33,23 +29,28 @@ const Movies = ({ addToFavorite, deleteToFavorite, props }) => {
             image: "/images/movie4.jpeg",
             description: "Super Hit Movie",
           }
-        ],
-        moviefav: []
 
-    });
+        ]);
 
-      addToFavorite = id => {
-        const data = state.movies.find(item => item.id === id);
-        setState({
-            moviefav: [...state.moviefav, data]
-        });
+    const [favorite, setFavourite ] = useState([]);
+
+      const addToFavorite = (id) => {
+        let data = [...favorite]
+        if (data.find(e => e.id === id)) {
+          alert("Movie is already in favorites");
+        }else {
+        data.push(state.find(item => item.id === id));
+        setFavourite(data)
+        }
+      }
+  
+       const deleteToFavorite = (id) => {
+        let data = [...favorite]
+        const remfav = data.findIndex((item) => item.id === id);
+        data.splice(remfav, 1);
+        setFavourite(data)
       };
-    
-      deleteToFavorite = id => {
-        const hapus = state.moviefav.filter(item => item.id !== id);
-        setState({ moviefav: hapus });
-      };
-
+      // console.log(favorite);
 
         return (
           <div className="container">
@@ -57,7 +58,7 @@ const Movies = ({ addToFavorite, deleteToFavorite, props }) => {
             <h1 className="tc">Add Favorite Movies</h1>
             <div className="wrap">
               <div className="container-left">
-              {state.movies?.map (item => (
+              {state?.map (item => (
                    <div className="listmovie" key={item.id} movies={state.movies} add={addToFavorite}>
                    <div className="imagenya">
                      <img className="imgstyle" src={item.image} alt={item.name} />
@@ -67,7 +68,7 @@ const Movies = ({ addToFavorite, deleteToFavorite, props }) => {
                      <p>
                        <span className="desc">Description : {item.description}</span>
                      </p>
-                     <button onClick={() => this.props.add(item.id)}>Add to Fav</button>
+                     <button onClick={() => addToFavorite(item.id)}>Add to Fav</button>
                    </div>
                  </div>
                 ))}  
@@ -77,11 +78,24 @@ const Movies = ({ addToFavorite, deleteToFavorite, props }) => {
 
               <h2 className="tc">Favorite Movies</h2>
               <div className="container-right">
+          
+              <div className="container-left">
+              {favorite?.map (item => (
+                   <div className="listmovie" key={item.id} movies={state.movies} add={deleteToFavorite}>
+                   <div className="imagenya">
+                     <img className="imgstyle" src={item.image} alt={item.name} />
+                   </div>
+                   <div className="descnya">
+                     <h3>Name : {item.name}</h3>
+                     <p>
+                       <span className="desc">Description : {item.description}</span>
+                     </p>
+                     <button onClick={() => deleteToFavorite(item.id)}>Delete</button>
+                   </div>
+                 </div>
+                ))}  
                
-                     <MovieFavorite
-                     moviefav={state.moviefav}
-                     delete={deleteToFavorite}
-                   />
+              </div>
               </div>
              
             </div>

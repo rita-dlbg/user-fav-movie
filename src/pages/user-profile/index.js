@@ -1,13 +1,11 @@
 import React from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { AccountCircle } from '@mui/icons-material';
 import { TextField, Box } from '@mui/material';
 
 
 const UserProfile = () => {
 
-    const [image, setImage] = useState();
     const [info, setInfo] = useState({
       fname:{
         value:'',
@@ -53,35 +51,76 @@ const UserProfile = () => {
 
     const handleChange = (e) => {
       const {name, value} = e.target;
-      setInfo({
-        ...info,
-        [name]:{
-          ...info[name],
-          value
-        }
-      })
+      if(value === ''){
+        setInfo({
+          ...info,
+          [name]:{
+            ...info[name],
+            value,
+            error: true
+          }
+        })
+      }else {
+        setInfo({
+          ...info,
+          [name]:{
+            ...info[name],
+            value,
+            error: false
+          }
+        })
+      }
+     
     } 
+
+    const handleSubmit = (e) => {
+      e.preventDefault();
+  
+      const formFields = Object.keys(info);
+      let newFormValues = {...info}
+  
+      let regex = /^(?:(?:\+|0{0,2})91(\s*|[\-])?|[0]?)?([6789]\d{2}([ -]?)\d{3}([ -]?)\d{4})$/;
+
+      for (let index = 0; index < formFields.length; index++) {
+        const currentField = formFields[index];
+        const currentValue = info[currentField].value;
+  
+        if(currentValue === ''){
+          newFormValues = {
+            ...newFormValues,
+            [currentField]:{
+              ...newFormValues[currentField],
+              error:true
+            }
+          }
+        }else if(currentField == "email" && !currentValue.match(regex)){
+          newFormValues = {
+            ...newFormValues,
+            [currentField]:{
+              ...newFormValues[currentField],
+              error:true,
+              errorMessage: "Invalid Email Format"
+            }
+          }
+        }
+      }
+  
+      console.log(info.number);
+      setInfo(newFormValues)
+    }
 
   return (
     <div className="user-profile tc">
        <nav className="pointer nav-link"><Link to="/movies">List of Movies</Link></nav> 
 
-      <div className="user-img flex items-center justify-center">
-        {image?
-         <img src="" />
-         :
-         <AccountCircle />
-        }
-      </div>
-      <button type="button" className="upload-img mt3 pointer btn-hover">Upload Image</button>
-
       <div className="user-info">
+       
       <Box
           component="form"
           sx={{
             '& > :not(style)': { m: 1, width: '25ch' },
           }}
-          noValidate
+          onSubmit={handleSubmit}
           autoComplete="off"
         >
           <TextField
@@ -90,6 +129,8 @@ const UserProfile = () => {
             value={info.fname.value}
             onChange={handleChange}
             type="text"
+            error={info.fname.error}
+            helperText={info.fname.error && info.fname.errorMessage}
           />
             <TextField
             label="Last Name"
@@ -97,6 +138,8 @@ const UserProfile = () => {
             value={info.lname.value}
             onChange={handleChange}
             type="text"
+            error={info.lname.error}
+            helperText={info.lname.error && info.lname.errorMessage}
           />
 
           <TextField
@@ -106,6 +149,8 @@ const UserProfile = () => {
             onChange={handleChange}
             type="text"
             fullWidth
+            error={info.username.error}
+            helperText={info.username.error && info.username.errorMessage}
           />
 
          <TextField
@@ -113,8 +158,9 @@ const UserProfile = () => {
             name="email"
             value={info.email.value}
             onChange={handleChange}
-            type="email"
             fullWidth
+            error={info.email.error}
+            helperText={info.email.error && info.email.errorMessage}
           />
 
           <TextField
@@ -123,6 +169,8 @@ const UserProfile = () => {
             value={info.contact.value}
             onChange={handleChange}
             type="number"
+            error={info.contact.error}
+            helperText={info.contact.error && info.contact.errorMessage}
           />
            <TextField
             label="Pin Code"
@@ -130,6 +178,8 @@ const UserProfile = () => {
             value={info.pin.value}
             onChange={handleChange}
             type="number"
+            error={info.pin.error}
+            helperText={info.pin.error && info.pin.errorMessage}
           />
 
           <TextField
@@ -139,6 +189,8 @@ const UserProfile = () => {
             onChange={handleChange}
             type="text"
             fullWidth
+            error={info.city.error}
+            helperText={info.pin.error && info.city.errorMessage}
           />
 
           <TextField
@@ -148,13 +200,14 @@ const UserProfile = () => {
             onChange={handleChange}
             type="text"
             fullWidth
+            error={info.state.error}
+            helperText={info.state.error && info.state.errorMessage}
           />
             
-
-              <button type="button" className="button-form btn-hover">Save </button>
-             
+              <button type="submit" className="button-form btn-hover">Save </button>
             
         </Box>
+       
       </div> 
 
       

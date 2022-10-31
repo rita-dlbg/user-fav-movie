@@ -36,21 +36,70 @@ const RegisterForm = () => {
     repassword:{
       value:'',
       error:false,
-      errorMessage:'Password does not matched'
+      errorMessage:'Enter Valid Password'
     },
 
   })
 
   const handleChange = (e) => {
     const {name, value} = e.target;
-    setValidation({
-      ...validation,
-      [name]:{
-        ...validation[name],
-        value
-      }
-    })
+    if(value === ''){
+      setValidation({
+        ...validation,
+        [name]:{
+          ...validation[name],
+          value,
+          error: true
+        }
+      })
+    }else {
+      setValidation({
+        ...validation,
+        [name]:{
+          ...validation[name],
+          value,
+          error: false
+        }
+      })
+    }
+   
   } 
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const formFields = Object.keys(validation);
+    let newFormValues = {...validation}
+
+    let regex = /^(?:(?:\+|0{0,2})91(\s*|[\-])?|[0]?)?([6789]\d{2}([ -]?)\d{3}([ -]?)\d{4})$/;
+
+    for (let index = 0; index < formFields.length; index++) {
+      const currentField = formFields[index];
+      const currentValue = validation[currentField].value;
+
+      if(currentValue === ''){
+        newFormValues = {
+          ...newFormValues,
+          [currentField]:{
+            ...newFormValues[currentField],
+            error:true
+          }
+        }
+      }else if(currentField == "email" && !currentValue.match(regex)){
+        newFormValues = {
+          ...newFormValues,
+          [currentField]:{
+            ...newFormValues[currentField],
+            error:true,
+            errorMessage: "Invalid Email Format"
+          }
+        }
+      }
+    }
+
+    console.log(validation.number);
+    setValidation(newFormValues)
+  }
 
   const handleClickShowPassword = () => {
     setValidation({
@@ -78,12 +127,13 @@ const RegisterForm = () => {
         <div className="form-box tc">
           <h1>Register</h1>
           <p>Fill Out This Form</p> 
+        
            <Box
           component="form"
           sx={{
             '& > :not(style)': { m: 1, width: '25ch' },
           }}
-          noValidate
+          onSubmit={handleSubmit} 
           autoComplete="off"
         >
           <TextField
@@ -92,6 +142,8 @@ const RegisterForm = () => {
             value={validation.fname.value}
             onChange={handleChange}
             type="text"
+            error={validation.fname.error}
+            helperText={validation.fname.error && validation.fname.errorMessage}
           />
             <TextField
             label="Last Name"
@@ -99,6 +151,8 @@ const RegisterForm = () => {
             value={validation.lname.value}
             onChange={handleChange}
             type="text"
+            error={validation.lname.error}
+            helperText={validation.lname.error && validation.lname.errorMessage}
           />
 
           <TextField
@@ -108,6 +162,8 @@ const RegisterForm = () => {
             onChange={handleChange}
             type="text"
             fullWidth
+            error={validation.username.error}
+            helperText={validation.username.error && validation.username.errorMessage}
           />
 
          <TextField
@@ -115,8 +171,9 @@ const RegisterForm = () => {
             name="email"
             value={validation.email.value}
             onChange={handleChange}
-            type="email"
             fullWidth
+            error={validation.email.error}
+            helperText={validation.email.error && validation.email.errorMessage}
           />
 
           <TextField
@@ -137,6 +194,8 @@ const RegisterForm = () => {
               </InputAdornment>
                 }}
                 fullWidth
+                error={validation.password.error}
+                helperText={validation.password.error && validation.password.errorMessage}
               />
 
              <TextField
@@ -157,6 +216,8 @@ const RegisterForm = () => {
               </InputAdornment>
                 }}
                 fullWidth
+                error={validation.repassword.error}
+                helperText={validation.repassword.error && validation.repassword.errorMessage}
               />
 
               <button className="button-form btn-hover" type="submit">Click to Register </button>
