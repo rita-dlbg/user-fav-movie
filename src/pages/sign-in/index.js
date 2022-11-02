@@ -1,7 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { TextField, Box, IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
@@ -10,6 +9,11 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 const SignIn = () => {
 
   const navigate = useNavigate();
+
+  // const handleSubmit = event => {
+  //   event.preventDefault();
+  //   navigate('/user-profile');
+  // };
      
   const [signin, setSignin] = useState({
     email:{
@@ -51,12 +55,14 @@ const SignIn = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    navigate('/user-profile');
 
     const formFields = Object.keys(signin);
     let newFormValues = {...signin}
 
-    let regex = /^(?:(?:\+|0{0,2})91(\s*|[\-])?|[0]?)?([6789]\d{2}([ -]?)\d{3}([ -]?)\d{4})$/;
-
+    let regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+    let pwdRegex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16}$/;
+    
     for (let index = 0; index < formFields.length; index++) {
       const currentField = formFields[index];
       const currentValue = signin[currentField].value;
@@ -76,6 +82,15 @@ const SignIn = () => {
             ...newFormValues[currentField],
             error:true,
             errorMessage: "Invalid Email Format"
+          }
+        }
+      }else if(currentField == "password" && !currentValue.match(pwdRegex)){
+        newFormValues = {
+          ...newFormValues,
+          [currentField]:{
+            ...newFormValues[currentField],
+            error:true,
+            errorMessage: "Password must contain one digit from 1 to 9, one lowercase letter, one uppercase letter, one special character,"
           }
         }
       }
