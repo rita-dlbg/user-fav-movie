@@ -72,6 +72,10 @@ const RegisterForm = () => {
     let newFormValues = {...validation}
 
     let regex = /^(?:(?:\+|0{0,2})91(\s*|[\-])?|[0]?)?([6789]\d{2}([ -]?)\d{3}([ -]?)\d{4})$/;
+    let pwdRegex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16}$/;
+
+    let a = validation.password.value;
+    let b = validation.repassword.value;
 
     for (let index = 0; index < formFields.length; index++) {
       const currentField = formFields[index];
@@ -92,6 +96,25 @@ const RegisterForm = () => {
             ...newFormValues[currentField],
             error:true,
             errorMessage: "Invalid Email Format"
+          }
+        }
+      }else if(currentField == "password" && !currentValue.match(pwdRegex)){
+        newFormValues = {
+          ...newFormValues,
+          [currentField]:{
+            ...newFormValues[currentField],
+            error:true,
+            errorMessage: "Password must contain one digit from 1 to 9, one lowercase letter, one uppercase letter, one special character,"
+          }
+        }
+      }
+      else if(a !== b){
+        newFormValues = {
+          ...newFormValues,
+          [currentField]:{
+            ...newFormValues[currentField],
+            error:true,
+            errorMessage: "Not matched password"
           }
         }
       }
@@ -199,7 +222,7 @@ const RegisterForm = () => {
               />
 
              <TextField
-                label="Repeat Password"
+                label="Confirm Password"
                 value={validation.repassword.value}
                 name="repassword"
                 type={validation.reShowPassword ? 'text' : 'password'}

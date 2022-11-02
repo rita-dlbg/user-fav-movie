@@ -49,6 +49,7 @@ const UserProfile = () => {
       },
     });
 
+
     const handleChange = (e) => {
       const {name, value} = e.target;
       if(value === ''){
@@ -81,6 +82,9 @@ const UserProfile = () => {
   
       let regex = /^(?:(?:\+|0{0,2})91(\s*|[\-])?|[0]?)?([6789]\d{2}([ -]?)\d{3}([ -]?)\d{4})$/;
 
+      let pinval = info.pin.value;
+      // let numval = info.contact.value;
+
       for (let index = 0; index < formFields.length; index++) {
         const currentField = formFields[index];
         const currentValue = info[currentField].value;
@@ -102,8 +106,28 @@ const UserProfile = () => {
               errorMessage: "Invalid Email Format"
             }
           }
-        }
       }
+      else if(pinval.length<6 || pinval.length>6){
+        newFormValues = {
+          ...newFormValues,
+          [currentField]:{
+            ...newFormValues[currentField],
+            error:true,
+            errorMessage: "Enter 6 digit valid pin"
+          }
+      }
+    }
+    // else if(numval.length<10 || numval.length>10){
+      //   newFormValues = {
+      //     ...newFormValues,
+      //     [currentField]:{
+      //       ...newFormValues[currentField],
+      //       error:true,
+      //       errorMessage: "Enter 10 digit valid Mobile No."
+      //     }
+      // }
+      // }
+    }
   
       console.log(info.number);
       setInfo(newFormValues)
@@ -168,7 +192,7 @@ const UserProfile = () => {
             name="contact"
             value={info.contact.value}
             onChange={handleChange}
-            type="number"
+            InputProps={{ inputProps: { min: 0, max: 10 } }}
             error={info.contact.error}
             helperText={info.contact.error && info.contact.errorMessage}
           />
@@ -177,8 +201,8 @@ const UserProfile = () => {
             name="pin"
             value={info.pin.value}
             onChange={handleChange}
-            type="number"
             error={info.pin.error}
+            InputProps={{ inputProps: { min: 0, max: 6 } }}
             helperText={info.pin.error && info.pin.errorMessage}
           />
 
@@ -190,7 +214,7 @@ const UserProfile = () => {
             type="text"
             fullWidth
             error={info.city.error}
-            helperText={info.pin.error && info.city.errorMessage}
+            helperText={info.city.error && info.city.errorMessage}
           />
 
           <TextField
