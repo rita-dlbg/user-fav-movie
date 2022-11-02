@@ -83,7 +83,8 @@ const UserProfile = () => {
       let regex = /^(?:(?:\+|0{0,2})91(\s*|[\-])?|[0]?)?([6789]\d{2}([ -]?)\d{3}([ -]?)\d{4})$/;
 
       let pinval = info.pin.value;
-      let numval = info.contact.value;
+
+      let cont = info.contact.value;
 
       for (let index = 0; index < formFields.length; index++) {
         const currentField = formFields[index];
@@ -107,7 +108,7 @@ const UserProfile = () => {
             }
           }
       }
-      else if(pinval.length<6 || pinval.length>6){
+      else if(currentField == "pin" && (pinval.length<6 || pinval.length>6)){
         newFormValues = {
           ...newFormValues,
           [currentField]:{
@@ -116,18 +117,17 @@ const UserProfile = () => {
             errorMessage: "Enter 6 digit valid pin"
           }
       }
+    }else if(currentField == "contact" && (cont.length<10 || cont.length>10)){
+      newFormValues = {
+        ...newFormValues,
+        [currentField]:{
+          ...newFormValues[currentField],
+          error:true,
+          errorMessage: "Enter 10 digit valid Mobile number"
+        }
     }
-    else if(numval.length<10 || numval.length>10){
-        newFormValues = {
-          ...newFormValues,
-          [currentField]:{
-            ...newFormValues[currentField],
-            error:true,
-            errorMessage: "Enter 10 digit valid Mobile No."
-          }
-      }
-      }
     }
+  }
   
       console.log(info.number);
       setInfo(newFormValues)

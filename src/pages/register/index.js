@@ -108,7 +108,7 @@ const RegisterForm = () => {
           }
         }
       }
-      else if(a !== b){
+      else if(currentField == "repassword" && (a !== b)){
         newFormValues = {
           ...newFormValues,
           [currentField]:{
