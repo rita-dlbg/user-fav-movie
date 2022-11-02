@@ -60,7 +60,7 @@ const SignIn = () => {
     const formFields = Object.keys(signin);
     let newFormValues = {...signin}
 
-    let regex = /^(?:(?:\+|0{0,2})91(\s*|[\-])?|[0]?)?([6789]\d{2}([ -]?)\d{3}([ -]?)\d{4})$/;
+    let regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
     let pwdRegex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16}$/;
     
     for (let index = 0; index < formFields.length; index++) {

@@ -80,7 +80,7 @@ const UserProfile = () => {
       const formFields = Object.keys(info);
       let newFormValues = {...info}
   
-      let regex = /^(?:(?:\+|0{0,2})91(\s*|[\-])?|[0]?)?([6789]\d{2}([ -]?)\d{3}([ -]?)\d{4})$/;
+      let regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
 
       let pinval = info.pin.value;
 

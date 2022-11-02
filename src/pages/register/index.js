@@ -71,7 +71,7 @@ const RegisterForm = () => {
     const formFields = Object.keys(validation);
     let newFormValues = {...validation}
 
-    let regex = /^(?:(?:\+|0{0,2})91(\s*|[\-])?|[0]?)?([6789]\d{2}([ -]?)\d{3}([ -]?)\d{4})$/;
+    let regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
     let pwdRegex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16}$/;
 
     let a = validation.password.value;
