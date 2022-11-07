@@ -1,14 +1,16 @@
 import React from 'react';
+import Cookies from 'universal-cookie';
 import { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { TextField, Box, IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 
-
 const SignIn = () => {
 
   const navigate = useNavigate();
+
+  const cookies = new Cookies();
 
   // const handleSubmit = event => {
   //   event.preventDefault();
@@ -17,12 +19,12 @@ const SignIn = () => {
      
   const [signin, setSignin] = useState({
     email:{
-      value:'',
+      value:cookies.get('email'),
       error:false,
       errorMessage:'Email is required'
     },
     password:{
-      value:'',
+      value:cookies.get('password'),
       error:false,
       errorMessage:'Enter Valid Password'
     }
@@ -113,7 +115,10 @@ const SignIn = () => {
       <div className="flex items-center user-form">
         <div className="form-box tc">
           <h1>Sign In</h1>
+         
+            
            <Box
+           method="GET"
           component="form"
           noValidate
           autoComplete="off"

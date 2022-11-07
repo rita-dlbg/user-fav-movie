@@ -125,6 +125,10 @@
   margin: auto;
 }
 
+.fav-icon svg{
+    color: red;
+}
+
 
 /* @media (prefers-reduced-motion: no-preference) {
   .App-logo {
