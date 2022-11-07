@@ -5,7 +5,7 @@ import './App.css';
 
 const history = createBrowserHistory();
 
-function App() {
+const App = () => {
   return (
         <Routes history={history} />
   );

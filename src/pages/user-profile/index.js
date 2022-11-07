@@ -1,14 +1,17 @@
 import React from "react";
 import { useState } from "react";
+import Cookies from 'universal-cookie';
 import { Link } from "react-router-dom";
 import { TextField, Box } from '@mui/material';
 
 
 const UserProfile = () => {
 
+  const cookies = new Cookies();
+
     const [info, setInfo] = useState({
       fname:{
-        value:'',
+        value:cookies.get('fname'),
         error:false,
         errorMessage:'First Name is required'
       },
@@ -23,7 +26,7 @@ const UserProfile = () => {
         errorMessage:'User Name is required'
       },
       email:{
-        value:'',
+        value:cookies.get('email'),
         error:false,
         errorMessage:'Email is required'
       },
@@ -146,6 +149,7 @@ const UserProfile = () => {
           }}
           onSubmit={handleSubmit}
           autoComplete="off"
+          method="GET"
         >
           <TextField
             label="First Name"

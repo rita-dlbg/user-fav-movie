@@ -1,11 +1,15 @@
 import React from 'react';
+import { Link, useNavigate } from "react-router-dom";
+import Cookies from 'universal-cookie';
 import { useState } from 'react';
 import { TextField, Box, IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { Link } from "react-router-dom";
 
 const RegisterForm = () => {
      
+  const navigate = useNavigate();
+  const cookies = new Cookies();
+
   const [validation, setValidation] = useState({
 
     fname:{
@@ -145,6 +149,13 @@ const RegisterForm = () => {
   const handleMouseReDownPassword = (event) => {
     event.preventDefault();
   };
+
+  const register = () => {
+    cookies.set("email", validation.email.value)
+    cookies.set("password", validation.password.value)
+    navigate("/sign-in")
+  }
+
   return (
       <div className="flex items-center user-form">
         <div className="form-box tc">
@@ -158,6 +169,7 @@ const RegisterForm = () => {
           }}
           onSubmit={handleSubmit} 
           autoComplete="off"
+          method="GET"
         >
           <TextField
             label="First Name"
@@ -243,7 +255,7 @@ const RegisterForm = () => {
                 helperText={validation.repassword.error && validation.repassword.errorMessage}
               />
 
-              <button className="button-form btn-hover" type="submit">Click to Register </button>
+              <button className="button-form btn-hover" onClick={() => {register();}} type="submit">Click to Register </button>
              
              <div className="tc link-to"><Link to="/sign-in">Click Here to Sign In</Link></div> 
         </Box>
